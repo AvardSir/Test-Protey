@@ -21,6 +21,13 @@ body {
   padding-right: 24px;
 }
 
+@media (max-width: 767px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
 .bg-blue-gradient {
   background: linear-gradient(90deg, #006def1a, #72c7fc1a);
   border: 1px solid #72c7fc99;

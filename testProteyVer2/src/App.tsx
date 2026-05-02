@@ -4,7 +4,10 @@ import { useForm } from 'react-hook-form'
 type Lecture = {
   id: string
   title: string
-  date: string
+  day: '7 апреля' | '8 апреля' | '9 апреля'
+  time: string
+  speaker: string
+  position: string
 }
 
 type FormValues = {
@@ -20,13 +23,57 @@ type FormValues = {
 type ModalType = 'success' | 'error' | 'lectureError'
 
 const lectureOptions: Lecture[] = [
-  { id: 'arch-control', title: 'Контролируемость архитектуры и полный цикл производства ПАК', date: '7 апреля, 11:00' },
-  { id: 'kii-resilience', title: 'Устойчивость КИИ к продолжительным угрозам', date: '7 апреля, 13:00' },
-  { id: 'secure-dev', title: 'Безопасная разработка ПО и аудит защищенности', date: '7 апреля, 15:00' },
-  { id: 'b2b-security', title: 'Технологическая безопасность инфраструктуры B2B', date: '8 апреля, 11:00' },
-  { id: 'b2g-infra', title: 'Требования к инфраструктуре органов госвласти', date: '8 апреля, 13:00' },
-  { id: 'regulation', title: 'Практика соответствия требованиям регуляторов', date: '9 апреля, 11:00' },
+  {
+    id: 'arch-control',
+    day: '7 апреля',
+    time: '11:00',
+    title: 'Вертикальное импортозамещение: путь к технологической безопасности сетей связи',
+    speaker: 'Игорь Молотов',
+    position: 'НТЦ ПРОТЕЙ',
+  },
+  {
+    id: 'unified-system',
+    day: '7 апреля',
+    time: '12:00',
+    title: 'Экосистема унифицированных коммуникаций ПРОТЕЙ',
+    speaker: 'Роман Карташев',
+    position: 'ПРОТЕЙ Технологии',
+  },
+  {
+    id: 'single-control',
+    day: '7 апреля',
+    time: '13:00',
+    title: 'Единая среда реагирования: как связь управляет инцидентами в ERP и системах безопасности',
+    speaker: 'Виталий Панов',
+    position: 'НТЦ ПРОТЕЙ',
+  },
+  {
+    id: 'critical-objects',
+    day: '8 апреля',
+    time: '11:00',
+    title: 'Управление инфраструктурой распределенных точек: контроль сети объектов в одной точке',
+    speaker: 'Олег Иванов',
+    position: 'НТЦ ПРОТЕЙ',
+  },
+  {
+    id: 'transport-kii',
+    day: '8 апреля',
+    time: '12:00',
+    title: 'Выделенные сети LTE на объектах КИИ: надежная транспортная среда для взаимодействия людей и координации устройств',
+    speaker: 'Ольга Свешникова',
+    position: 'НТЦ ПРОТЕЙ',
+  },
+  {
+    id: 'command-comms',
+    day: '9 апреля',
+    time: '11:00',
+    title: 'Надежная корпоративная сеть телефонной связи: что нужно и как создать',
+    speaker: 'Павел Бажин',
+    position: 'НТЦ ПРОТЕЙ',
+  },
 ]
+
+const days: Array<Lecture['day']> = ['7 апреля', '8 апреля', '9 апреля']
 
 function normalizePhone(value: string): string {
   const digits = value.replace(/\D/g, '').slice(0, 11)
@@ -49,6 +96,7 @@ function normalizePhone(value: string): string {
 function App() {
   const [modalType, setModalType] = useState<ModalType | null>(null)
   const [isSubmittingMock, setIsSubmittingMock] = useState(false)
+  const [openDays, setOpenDays] = useState<Set<Lecture['day']>>(new Set())
 
   const {
     register,
@@ -108,6 +156,15 @@ function App() {
     [selectedLectures],
   )
 
+  const lecturesByDay = useMemo(
+    () =>
+      days.map((day) => ({
+        day,
+        lectures: lectureOptions.filter((lecture) => lecture.day === day),
+      })),
+    [],
+  )
+
   useEffect(() => {
     const onEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -118,21 +175,103 @@ function App() {
     return () => window.removeEventListener('keydown', onEscape)
   }, [])
 
+  const toggleDay = (day: Lecture['day']) => {
+    setOpenDays((prev) => {
+      const next = new Set(prev)
+      if (next.has(day)) {
+        next.delete(day)
+      } else {
+        next.add(day)
+      }
+      return next
+    })
+  }
+
   return (
     <main className="min-h-screen bg-[#131c2d] px-4 py-10 text-white md:py-16">
       <section className="container mx-auto max-w-[1176px]">
-        <div className="mx-auto max-w-[744px] rounded-[8px] bg-blue-gradient p-4 md:p-6 lg:p-12">
-          <h1 className="mb-2 text-center text-[24px] font-semibold leading-[125%] lg:text-[40px] lg:leading-[114%]">
-            Регистрация на лекторий
-          </h1>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] lg:gap-10">
+          <div>
+            <h2 className="text-[36px] font-semibold leading-[114%] md:text-[44px] lg:text-[56px]">
+              Программа лектория
+            </h2>
+            <p className="mt-3 max-w-[620px] text-[14px] leading-[143%] text-[#d4e0f5] md:text-[16px] md:leading-[150%]">
+              Выберите интересующие вас темы и составьте индивидуальное расписание. Регистрация
+              доступна на каждое событие отдельно.
+            </p>
 
-          <form className="mt-6" onSubmit={handleSubmit(onSubmit)} noValidate>
-            <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-6">
+            <div className="mt-5">
+              {lecturesByDay.map(({ day, lectures }) => {
+                const isOpen = openDays.has(day)
+                return (
+                  <div key={day} className="border-b border-[#1d5f90] py-3">
+                    <button
+                      type="button"
+                      className="flex w-full items-center justify-between text-left"
+                      onClick={() => toggleDay(day)}
+                    >
+                      <span className="text-[34px] font-semibold leading-[114%] md:text-[42px] lg:text-[56px]">
+                        {day}
+                      </span>
+                      <span
+                        className={`text-[20px] text-white transition-transform ${
+                          isOpen ? 'rotate-180' : ''
+                        }`}
+                      >
+                        ⌃
+                      </span>
+                    </button>
+
+                    {isOpen && (
+                      <div className="mt-3 grid gap-2.5 pb-2">
+                        {lectures.map((lecture) => (
+                          <label
+                            key={lecture.id}
+                            className="lecture-card flex cursor-pointer gap-3 rounded-[3px] border border-transparent p-2.5 transition-colors hover:border-[#75c9ea]"
+                          >
+                            <input
+                              {...register('lectures')}
+                              value={lecture.id}
+                              type="checkbox"
+                              className="mt-5 h-4 w-4 shrink-0 accent-[#75c9ea]"
+                            />
+                            <div className="h-[54px] w-[54px] shrink-0 rounded-[2px] bg-[linear-gradient(135deg,#2d3b50,#5f7c9b)]" />
+                            <div className="min-w-0">
+                              <div className="mb-1 inline-flex rounded-[8px] bg-[#0c1f36] px-2 py-[2px] text-[8px] leading-[125%] text-[#75c9ea]">
+                                {lecture.time}
+                              </div>
+                              <p className="text-[15px] font-semibold leading-[125%] text-white md:text-[18px]">
+                                {lecture.title}
+                              </p>
+                              <p className="mt-1 text-[10px] leading-[125%] text-[#d4e0f5]">
+                                {lecture.speaker}
+                              </p>
+                              <p className="text-[10px] leading-[125%] text-[#ffffff80]">
+                                {lecture.position}
+                              </p>
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="rounded-[8px] bg-blue-gradient p-4 md:p-6 lg:p-5">
+            <h1 className="mb-3 text-[36px] font-semibold leading-[114%] md:text-[44px] lg:text-[56px]">
+              Регистрация <br /> на лекторий
+            </h1>
+
+            <form className="mt-2" onSubmit={handleSubmit(onSubmit)} noValidate>
+              <div className="grid grid-cols-1 gap-2">
               <label className="col-span-1 block">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%] lg:text-[16px] lg:leading-[150%]">
+                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
                   ФИО <span className="text-[#75c9ea]">*</span>
                 </span>
-              <input
+                <input
                   {...register('fullName', {
                     required: 'Обязательное поле',
                     minLength: { value: 2, message: 'Минимум 2 символа' },
@@ -141,7 +280,7 @@ function App() {
                   type="text"
                   autoComplete="name"
                   placeholder="Иванов Иван Иванович"
-                  className={`w-full rounded-[8px] border bg-[#000c1480] p-2 text-[12px] font-normal leading-[167%] text-[#ffffff4d] outline-none transition-colors md:text-sm md:leading-[143%] placeholder:text-[#ffffff4d] ${
+                  className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
                     errors.fullName
                       ? 'border-red-500'
                       : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
@@ -151,7 +290,7 @@ function App() {
               </label>
 
               <label className="col-span-1 block">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%] lg:text-[16px] lg:leading-[150%]">
+                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
                   Телефон <span className="text-[#75c9ea]">*</span>
                 </span>
                 <input
@@ -163,7 +302,7 @@ function App() {
                   type="tel"
                   autoComplete="tel"
                   placeholder="+7 (987) 654-32-10"
-                  className={`w-full rounded-[8px] border bg-[#000c1480] p-2 text-[12px] font-normal leading-[167%] text-[#ffffff4d] outline-none transition-colors md:text-sm md:leading-[143%] placeholder:text-[#ffffff4d] ${
+                  className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
                     errors.phone
                       ? 'border-red-500'
                       : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
@@ -173,7 +312,7 @@ function App() {
               </label>
 
               <label className="col-span-1 block">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%] lg:text-[16px] lg:leading-[150%]">
+                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
                   Компания <span className="text-[#75c9ea]">*</span>
                 </span>
                 <input
@@ -185,7 +324,7 @@ function App() {
                   type="text"
                   autoComplete="organization"
                   placeholder="Название компании"
-                  className={`w-full rounded-[8px] border bg-[#000c1480] p-2 text-[12px] font-normal leading-[167%] text-[#ffffff4d] outline-none transition-colors md:text-sm md:leading-[143%] placeholder:text-[#ffffff4d] ${
+                  className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
                     errors.company
                       ? 'border-red-500'
                       : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
@@ -195,7 +334,7 @@ function App() {
               </label>
 
               <label className="col-span-1 block">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%] lg:text-[16px] lg:leading-[150%]">
+                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
                   Должность <span className="text-[#75c9ea]">*</span>
                 </span>
                 <input
@@ -207,7 +346,7 @@ function App() {
                   type="text"
                   autoComplete="organization-title"
                   placeholder="Руководитель отдела..."
-                  className={`w-full rounded-[8px] border bg-[#000c1480] p-2 text-[12px] font-normal leading-[167%] text-[#ffffff4d] outline-none transition-colors md:text-sm md:leading-[143%] placeholder:text-[#ffffff4d] ${
+                  className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
                     errors.position
                       ? 'border-red-500'
                       : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
@@ -216,11 +355,11 @@ function App() {
                 <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.position?.message}</span>
               </label>
 
-              <label className="col-span-1 block md:col-span-2 lg:col-span-1">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%] lg:text-[16px] lg:leading-[150%]">
+              <label className="col-span-1 block">
+                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
                   Email <span className="text-[#75c9ea]">*</span>
                 </span>
-              <input
+                <input
                   {...register('email', {
                     required: 'Обязательное поле',
                     pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, message: 'Некорректный email' },
@@ -228,7 +367,7 @@ function App() {
                   type="email"
                   autoComplete="email"
                   placeholder="example@company.ru"
-                  className={`w-full rounded-[8px] border bg-[#000c1480] p-2 text-[12px] font-normal leading-[167%] text-[#ffffff4d] outline-none transition-colors md:text-sm md:leading-[143%] placeholder:text-[#ffffff4d] ${
+                  className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
                     errors.email
                       ? 'border-red-500'
                       : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
@@ -237,8 +376,8 @@ function App() {
                 <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.email?.message}</span>
               </label>
 
-              <label className="col-span-1 block md:col-span-2 lg:col-span-1">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%] lg:text-[16px] lg:leading-[150%]">
+              <label className="col-span-1 block">
+                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
                   Ваши вопросы к обсуждению
                 </span>
                 <textarea
@@ -248,7 +387,7 @@ function App() {
                   autoComplete="off"
                   placeholder="Какие темы вам особенно интересны?"
                   rows={4}
-                  className={`block w-full resize-y rounded-[8px] border bg-[#000c1480] p-2 text-[12px] font-normal leading-[167%] text-[#ffffff4d] outline-none transition-colors md:text-sm md:leading-[143%] placeholder:text-[#ffffff4d] ${
+                  className={`block h-[110px] w-full resize-none rounded-[8px] border bg-[#000c1480] p-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
                     errors.discussionQuestions
                       ? 'border-red-500'
                       : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
@@ -258,59 +397,23 @@ function App() {
                   {errors.discussionQuestions?.message}
                 </span>
               </label>
-            </div>
+              </div>
 
-            <div className="mb-6 mt-6 grid gap-3">
-              {lectureOptions.map((lecture) => (
-                <label
-                  key={lecture.id}
-                  className="lecture-card flex cursor-pointer gap-3 rounded-[8px] border border-transparent p-3 transition-colors hover:border-[#75c9ea]"
-                >
-                  <input
-                    {...register('lectures')}
-                    value={lecture.id}
-                    type="checkbox"
-                    className="mt-1 h-4 w-4 shrink-0 accent-[#75c9ea]"
-                  />
-                  <span className="grid">
-                    <span className="text-[10px] leading-[125%] text-white md:text-[14px] md:leading-[150%] lg:text-[16px]">
-                      {lecture.title}
-                    </span>
-                    <span className="mt-1 text-[10px] leading-[125%] text-[#ffffff4d] md:text-[12px]">
-                      {lecture.date}
-                    </span>
-                  </span>
-                </label>
-              ))}
-            </div>
-
-            <p className="mb-6 text-[10px] font-normal leading-[150%] text-white md:mb-12 md:text-[14px] lg:mb-6 lg:text-[16px]">
+              <p className="mb-6 mt-2 text-[18px] font-normal leading-[156%] text-white">
               Выбрано{' '}
-              <span className="text-[12px] leading-[125%] text-[#75c9ea] md:text-[16px] lg:text-[18px] lg:leading-[156%]">
+              <span className="text-[18px] leading-[156%] text-[#75c9ea]">
                 {selectedCount}
               </span>{' '}
               лекций
-            </p>
+              </p>
 
-            <div className="mt-6">
+              <div className="mt-3">
               <button
                 type="submit"
                 disabled={isSubmittingMock}
-                onClick={() => {
-                  if (selectedCount === 0) {
-                    setModalType('lectureError')
-                  }
-                }}
-                className="btn-ghost inline-flex w-full cursor-pointer items-center justify-center rounded-lg px-6 py-3 text-[12px] font-normal leading-[125%] text-white transition-opacity duration-200 hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50 md:text-[16px] lg:text-[18px] lg:leading-[156%]"
+                className="btn-ghost inline-flex h-[42px] w-full cursor-pointer items-center justify-center rounded-lg px-6 text-[16px] font-normal leading-[150%] text-white transition-opacity duration-200 hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isSubmittingMock ? 'Отправка...' : 'Зарегистрироваться'}
-              </button>
-              <button
-                type="button"
-                onClick={() => setModalType('error')}
-                className="mt-3 inline-flex w-full cursor-pointer items-center justify-center rounded-lg border border-[#ff8b3d] bg-transparent px-6 py-3 text-[12px] font-normal leading-[125%] text-white/90 transition-opacity duration-200 hover:opacity-80 md:text-[16px] lg:text-[18px] lg:leading-[156%]"
-              >
-                Смоделировать ошибку
               </button>
               <p className="mt-3 text-center text-[10px] font-normal leading-[125%] text-[#ffffff4d] md:text-sm md:leading-[143%]">
                 Нажимая кнопку, вы соглашаетесь с{' '}
@@ -324,8 +427,9 @@ function App() {
                 </a>
                 .
               </p>
-            </div>
-          </form>
+              </div>
+            </form>
+          </div>
         </div>
       </section>
 
