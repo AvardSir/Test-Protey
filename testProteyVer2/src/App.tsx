@@ -187,12 +187,20 @@ function App() {
     })
   }
 
+  const toggleLecture = (lectureId: string) => {
+    const isSelected = selectedLectures.includes(lectureId)
+    const next = isSelected
+      ? selectedLectures.filter((id) => id !== lectureId)
+      : [...selectedLectures, lectureId]
+    setValue('lectures', next, { shouldValidate: true, shouldDirty: true })
+  }
+
   return (
     <main className="min-h-screen bg-[#131c2d] px-4 py-10 text-white md:py-16">
       <section className="container mx-auto max-w-[1176px]">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] lg:gap-10">
           <div>
-            <h2 className="text-[36px] font-semibold leading-[114%] md:text-[44px] lg:text-[56px]">
+            <h2 className="text-[48px] font-semibold leading-[114%] md:text-[52px] lg:text-[56px]">
               Программа лектория
             </h2>
             <p className="mt-3 max-w-[620px] text-[14px] leading-[143%] text-[#d4e0f5] md:text-[16px] md:leading-[150%]">
@@ -205,36 +213,26 @@ function App() {
                 const isOpen = openDays.has(day)
                 return (
                   <div key={day} className="border-b border-[#1d5f90] py-3">
-                    <button
-                      type="button"
-                      className="flex w-full items-center justify-between text-left"
-                      onClick={() => toggleDay(day)}
-                    >
-                      <span className="text-[34px] font-semibold leading-[114%] md:text-[42px] lg:text-[56px]">
+                    <button type="button" className="flex items-center gap-3 text-left" onClick={() => toggleDay(day)}>
+                      <span className="text-[20px] font-semibold leading-[114%] md:text-[28px] lg:text-[44px]">
                         {day}
                       </span>
-                      <span
-                        className={`text-[20px] text-white transition-transform ${
-                          isOpen ? 'rotate-180' : ''
-                        }`}
-                      >
-                        ⌃
+                      <span className={`text-[14px] text-white transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+                        ⌄
                       </span>
                     </button>
 
                     {isOpen && (
                       <div className="mt-3 grid gap-2.5 pb-2">
                         {lectures.map((lecture) => (
-                          <label
+                          <button
+                            type="button"
                             key={lecture.id}
-                            className="lecture-card flex cursor-pointer gap-3 rounded-[3px] border border-transparent p-2.5 transition-colors hover:border-[#75c9ea]"
+                            onClick={() => toggleLecture(lecture.id)}
+                            className={`lecture-card flex w-full cursor-pointer gap-3 rounded-[3px] border p-2.5 text-left transition-colors hover:border-[#75c9ea] ${
+                              selectedLectures.includes(lecture.id) ? 'border-[#75c9ea]' : 'border-transparent'
+                            }`}
                           >
-                            <input
-                              {...register('lectures')}
-                              value={lecture.id}
-                              type="checkbox"
-                              className="mt-5 h-4 w-4 shrink-0 accent-[#75c9ea]"
-                            />
                             <div className="h-[54px] w-[54px] shrink-0 rounded-[2px] bg-[linear-gradient(135deg,#2d3b50,#5f7c9b)]" />
                             <div className="min-w-0">
                               <div className="mb-1 inline-flex rounded-[8px] bg-[#0c1f36] px-2 py-[2px] text-[8px] leading-[125%] text-[#75c9ea]">
@@ -250,7 +248,7 @@ function App() {
                                 {lecture.position}
                               </p>
                             </div>
-                          </label>
+                          </button>
                         ))}
                       </div>
                     )}
@@ -260,8 +258,8 @@ function App() {
             </div>
           </div>
 
-          <div className="rounded-[8px] bg-blue-gradient p-4 md:p-6 lg:p-5">
-            <h1 className="mb-3 text-[36px] font-semibold leading-[114%] md:text-[44px] lg:text-[56px]">
+          <div className="rounded-[8px] bg-blue-gradient p-4 md:p-5 lg:p-5">
+            <h1 className="mb-3 text-[46px] font-semibold leading-[114%] md:text-[48px] lg:text-[56px]">
               Регистрация <br /> на лекторий
             </h1>
 
