@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Montserrat, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #131c2d;
+  color: #ffffff;
+}
+
+.container {
+  max-width: 1176px;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.bg-blue-gradient {
+  background: linear-gradient(90deg, #006def1a, #72c7fc1a);
+  border: 1px solid #72c7fc99;
+}
+
+.btn-blue {
+  background: linear-gradient(90deg, #77cdddcc, #0ba1ddcc);
+  border: 1px solid transparent;
+}
+
+.btn-ghost {
+  background: linear-gradient(90deg, #006def1a, #72c7fc1a);
+  border: 1px solid #75c9ea;
+}
+
+.lecture-card {
+  background: linear-gradient(90deg, #006def1a, #72c7fc1a);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+@media (hover: hover) {
+  .lecture-card:hover {
+    background: linear-gradient(90deg, #006def33, #72c7fc33);
+    box-shadow: 0 0 16px #72c7fc80;
+  }
+}
