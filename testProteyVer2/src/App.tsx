@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import leftGlow from './assets/left-glow.png'
+import sp1 from './assets/speakers/sp1.png'
+import sp2 from './assets/speakers/sp2.png'
+import sp3 from './assets/speakers/sp3.png'
+import sp4 from './assets/speakers/sp4.png'
+import sp5 from './assets/speakers/sp5.png'
+import sp6 from './assets/speakers/sp6.png'
 
 type Lecture = {
   id: string
@@ -8,6 +15,7 @@ type Lecture = {
   time: string
   speaker: string
   position: string
+  image: string
 }
 
 type FormValues = {
@@ -26,50 +34,56 @@ const lectureOptions: Lecture[] = [
   {
     id: 'arch-control',
     day: '7 апреля',
-    time: '11:00',
+    time: '11:00-12:00',
     title: 'Вертикальное импортозамещение: путь к технологической безопасности сетей связи',
-    speaker: 'Игорь Молотов',
+    speaker: 'Игорь Ищенко Александр, пресейл-менеджер',
     position: 'НТЦ ПРОТЕЙ',
+    image: sp1,
   },
   {
     id: 'unified-system',
     day: '7 апреля',
-    time: '12:00',
+    time: '12:00-13:00',
     title: 'Экосистема унифицированных коммуникаций ПРОТЕЙ',
-    speaker: 'Роман Карташев',
+    speaker: 'Роман Дмитриев, пресейл-менеджер',
     position: 'ПРОТЕЙ Технологии',
+    image: sp2,
   },
   {
     id: 'single-control',
     day: '7 апреля',
-    time: '13:00',
+    time: '13:00-14:00',
     title: 'Единая среда реагирования: как связь управляет инцидентами в ERP и системах безопасности',
-    speaker: 'Виталий Панов',
+    speaker: 'Виталий Павлов',
     position: 'НТЦ ПРОТЕЙ',
+    image: sp3,
   },
   {
     id: 'critical-objects',
     day: '8 апреля',
-    time: '11:00',
+    time: '14:00-15:00',
     title: 'Управление инфраструктурой распределенных точек: контроль сети объектов в одной точке',
-    speaker: 'Олег Иванов',
+    speaker: 'Олег Иванов, руководитель проектного офиса',
     position: 'НТЦ ПРОТЕЙ',
+    image: sp4,
   },
   {
     id: 'transport-kii',
     day: '8 апреля',
-    time: '12:00',
+    time: '15:00-16:00',
     title: 'Выделенные сети LTE на объектах КИИ: надежная транспортная среда для взаимодействия людей и координации устройств',
-    speaker: 'Ольга Свешникова',
+    speaker: 'Павел Бажин, инженер',
     position: 'НТЦ ПРОТЕЙ',
+    image: sp5,
   },
   {
     id: 'command-comms',
     day: '9 апреля',
-    time: '11:00',
+    time: '16:00-17:00',
     title: 'Надежная корпоративная сеть телефонной связи: что нужно и как создать',
-    speaker: 'Павел Бажин',
+    speaker: 'Виталий Панов, менеджер продукта',
     position: 'НТЦ ПРОТЕЙ',
+    image: sp6,
   },
 ]
 
@@ -196,14 +210,20 @@ function App() {
   }
 
   return (
-    <main className="min-h-screen bg-[#131c2d] px-4 py-10 text-white md:py-16">
+    <main className="relative min-h-screen overflow-hidden bg-[#131c2d] px-4 py-10 text-white md:py-16">
+      <img
+        src={leftGlow}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 z-0 w-[380px] opacity-90 lg:w-[520px]"
+      />
       <section className="container mx-auto max-w-[1176px]">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] lg:gap-10">
+        <div className="relative z-10 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] lg:gap-10">
           <div>
-            <h2 className="text-[48px] font-semibold leading-[114%] md:text-[52px] lg:text-[56px]">
+            <h2 className="text-[52px] font-semibold leading-[114%] md:text-[54px] lg:text-[56px]">
               Программа лектория
             </h2>
-            <p className="mt-3 max-w-[620px] text-[14px] leading-[143%] text-[#d4e0f5] md:text-[16px] md:leading-[150%]">
+            <p className="mt-3 max-w-[620px] text-[14px] leading-[143%] text-white md:text-[16px] md:leading-[150%]">
               Выберите интересующие вас темы и составьте индивидуальное расписание. Регистрация
               доступна на каждое событие отдельно.
             </p>
@@ -217,9 +237,14 @@ function App() {
                       <span className="text-[20px] font-semibold leading-[114%] md:text-[28px] lg:text-[44px]">
                         {day}
                       </span>
-                      <span className={`text-[14px] text-white transition-transform ${isOpen ? 'rotate-180' : ''}`}>
-                        ⌄
-                      </span>
+                      <svg
+                        className={`h-3 w-3 shrink-0 text-white transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path d="M2 4.5L6 8L10 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      </svg>
                     </button>
 
                     {isOpen && (
@@ -233,18 +258,18 @@ function App() {
                               selectedLectures.includes(lecture.id) ? 'border-[#75c9ea]' : 'border-transparent'
                             }`}
                           >
-                            <div className="h-[54px] w-[54px] shrink-0 rounded-[2px] bg-[linear-gradient(135deg,#2d3b50,#5f7c9b)]" />
+                            <img src={lecture.image} alt="" aria-hidden="true" className="h-[80px] w-[80px] shrink-0 rounded-[2px] object-cover" />
                             <div className="min-w-0">
-                              <div className="mb-1 inline-flex rounded-[8px] bg-[#0c1f36] px-2 py-[2px] text-[8px] leading-[125%] text-[#75c9ea]">
+                              <div className="mb-1 inline-flex rounded-[8px] border border-[#75c9ea] bg-transparent px-2 py-[1px] text-[10px] leading-[125%] text-white">
                                 {lecture.time}
                               </div>
-                              <p className="text-[15px] font-semibold leading-[125%] text-white md:text-[18px]">
+                              <p className="text-[14px] font-semibold leading-[120%] text-white md:text-[16px]">
                                 {lecture.title}
                               </p>
-                              <p className="mt-1 text-[10px] leading-[125%] text-[#d4e0f5]">
+                              <p className="mt-1 text-[11px] leading-[125%] text-white">
                                 {lecture.speaker}
                               </p>
-                              <p className="text-[10px] leading-[125%] text-[#ffffff80]">
+                              <p className="text-[11px] leading-[125%] text-white">
                                 {lecture.position}
                               </p>
                             </div>
@@ -259,7 +284,7 @@ function App() {
           </div>
 
           <div className="rounded-[8px] bg-blue-gradient p-4 md:p-5 lg:p-5">
-            <h1 className="mb-3 text-[46px] font-semibold leading-[114%] md:text-[48px] lg:text-[56px]">
+            <h1 className="mb-3 max-w-[250px] text-[36px] font-semibold leading-[108%] md:text-[38px] lg:text-[42px]">
               Регистрация <br /> на лекторий
             </h1>
 
