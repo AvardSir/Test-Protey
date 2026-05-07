@@ -215,15 +215,13 @@ function App() {
         src={leftGlow}
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 left-0 z-0 w-[380px] opacity-90 lg:w-[520px]"
+        className="pointer-events-none absolute bottom-0 left-0 z-0 hidden w-[380px] lg:w-[520px] min-[1440px]:block"
       />
       <section className="container mx-auto max-w-[1176px]">
         <div className="relative z-10 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] lg:gap-10">
           <div>
-            <h2 className="text-[52px] font-semibold leading-[114%] md:text-[54px] lg:text-[56px]">
-              Программа лектория
-            </h2>
-            <p className="mt-3 max-w-[620px] text-[14px] leading-[143%] text-white md:text-[16px] md:leading-[150%]">
+            <h2>Программа лектория</h2>
+            <p className="body-l mt-3 max-w-[620px] text-white">
               Выберите интересующие вас темы и составьте индивидуальное расписание. Регистрация
               доступна на каждое событие отдельно.
             </p>
@@ -234,9 +232,7 @@ function App() {
                 return (
                   <div key={day} className="border-b border-[#1d5f90] py-3">
                     <button type="button" className="flex items-center gap-3 text-left" onClick={() => toggleDay(day)}>
-                      <span className="text-[20px] font-semibold leading-[114%] md:text-[28px] lg:text-[44px]">
-                        {day}
-                      </span>
+                      <h3>{day}</h3>
                       <svg
                         className={`h-3 w-3 shrink-0 text-white transition-transform ${isOpen ? 'rotate-180' : ''}`}
                         viewBox="0 0 12 12"
@@ -254,9 +250,8 @@ function App() {
                             type="button"
                             key={lecture.id}
                             onClick={() => toggleLecture(lecture.id)}
-                            className={`lecture-card flex w-full cursor-pointer gap-3 rounded-[3px] border p-2.5 text-left transition-colors hover:border-[#75c9ea] ${
-                              selectedLectures.includes(lecture.id) ? 'border-[#75c9ea]' : 'border-transparent'
-                            }`}
+                            className={`lecture-card flex w-full cursor-pointer gap-3 rounded-[3px] border p-2.5 text-left transition-colors hover:border-[#75c9ea] ${selectedLectures.includes(lecture.id) ? 'border-[#75c9ea]' : 'border-transparent'
+                              }`}
                           >
                             <img src={lecture.image} alt="" aria-hidden="true" className="h-[80px] w-[80px] shrink-0 rounded-[2px] object-cover" />
                             <div className="min-w-0">
@@ -283,179 +278,187 @@ function App() {
             </div>
           </div>
 
-          <div className="rounded-[8px] bg-blue-gradient p-4 md:p-5 lg:p-5">
-            <h1 className="mb-3 max-w-[250px] text-[36px] font-semibold leading-[108%] md:text-[38px] lg:text-[42px]">
+
+
+          <div>
+            <div className="mb-6 md:mb-8 lg:mb-12" data-label="div.mb-6">
+              <div className="text-center mx-auto">
+                <h2 className="text-[16px] md:text-[32px] lg:text-[40px] font-semibold leading-[125%] lg:leading-[133%] tracking-[-0.01em] text-white mb-2 md:mb-6">
+                  Регистрация на лекторий
+                </h2>
+              </div>
+            </div>
+
+            <h2>
               Регистрация <br /> на лекторий
-            </h1>
+            </h2>
 
-            <form className="mt-2" onSubmit={handleSubmit(onSubmit)} noValidate>
-              <div className="grid grid-cols-1 gap-2">
-              <label className="col-span-1 block">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
-                  ФИО <span className="text-[#75c9ea]">*</span>
-                </span>
-                <input
-                  {...register('fullName', {
-                    required: 'Обязательное поле',
-                    minLength: { value: 2, message: 'Минимум 2 символа' },
-                    pattern: { value: /^[a-zA-Zа-яёА-ЯЁ\s\-.]+$/, message: 'Только буквы' },
-                  })}
-                  type="text"
-                  autoComplete="name"
-                  placeholder="Иванов Иван Иванович"
-                  className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
-                    errors.fullName
-                      ? 'border-red-500'
-                      : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
-                  }`}
-                />
-                <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.fullName?.message}</span>
-              </label>
+            <div className="rounded-[8px] bg-blue-gradient p-4 md:p-5 lg:p-5">
+              <form className="mt-2" onSubmit={handleSubmit(onSubmit)} noValidate>
+                <div className="grid grid-cols-1 gap-2">
+                  <label className="col-span-1 block">
+                    <span className="caption mb-1 block text-white">
+                      ФИО <span className="text-[#75c9ea]">*</span>
+                    </span>
+                    {/* инпуты остаются с прежними классами, т.к. это не типографика заголовков */}
+                    <input
+                      {...register('fullName', {
+                        required: 'Обязательное поле',
+                        minLength: { value: 2, message: 'Минимум 2 символа' },
+                        pattern: { value: /^[a-zA-Zа-яёА-ЯЁ\s\-.]+$/, message: 'Только буквы' },
+                      })}
+                      type="text"
+                      autoComplete="name"
+                      placeholder="Иванов Иван Иванович"
+                      className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${errors.fullName ? 'border-red-500' : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
+                        }`}
+                    />
+                    <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.fullName?.message}</span>
+                  </label>
 
-              <label className="col-span-1 block">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
-                  Телефон <span className="text-[#75c9ea]">*</span>
-                </span>
-                <input
-                  {...phoneRegistration}
-                  onChange={(event) => {
-                    const formatted = normalizePhone(event.target.value)
-                    setValue('phone', formatted, { shouldValidate: true })
-                  }}
-                  type="tel"
-                  autoComplete="tel"
-                  placeholder="+7 (987) 654-32-10"
-                  className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
-                    errors.phone
-                      ? 'border-red-500'
-                      : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
-                  }`}
-                />
-                <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.phone?.message}</span>
-              </label>
 
-              <label className="col-span-1 block">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
-                  Компания <span className="text-[#75c9ea]">*</span>
-                </span>
-                <input
-                  {...register('company', {
-                    required: 'Обязательное поле',
-                    minLength: { value: 2, message: 'Минимум 2 символа' },
-                    pattern: { value: /^[^<>{}\\]+$/, message: 'Недопустимые символы' },
-                  })}
-                  type="text"
-                  autoComplete="organization"
-                  placeholder="Название компании"
-                  className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
-                    errors.company
-                      ? 'border-red-500'
-                      : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
-                  }`}
-                />
-                <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.company?.message}</span>
-              </label>
 
-              <label className="col-span-1 block">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
-                  Должность <span className="text-[#75c9ea]">*</span>
-                </span>
-                <input
-                  {...register('position', {
-                    required: 'Обязательное поле',
-                    minLength: { value: 2, message: 'Минимум 2 символа' },
-                    pattern: { value: /^[a-zA-Zа-яёА-ЯЁ0-9\s\-.,]+$/, message: 'Только буквы и цифры' },
-                  })}
-                  type="text"
-                  autoComplete="organization-title"
-                  placeholder="Руководитель отдела..."
-                  className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
-                    errors.position
-                      ? 'border-red-500'
-                      : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
-                  }`}
-                />
-                <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.position?.message}</span>
-              </label>
+                  {/* ... остальные поля формы без изменений ... */}
+                  <label className="col-span-1 block">
+                    <span className="mb-1 block text-[12px] font-normal leading-[125%] md:text-[12px] lg:text-[14px] lg:leading-[20px]">
+                      Телефон <span className="text-[#75c9ea]">*</span>
+                    </span>
+                    <input
+                      {...phoneRegistration}
+                      onChange={(event) => {
+                        const formatted = normalizePhone(event.target.value)
+                        setValue('phone', formatted, { shouldValidate: true })
+                      }}
+                      type="tel"
+                      autoComplete="tel"
+                      placeholder="+7 (987) 654-32-10"
+                      className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${errors.phone
+                        ? 'border-red-500'
+                        : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
+                        }`}
+                    />
+                    <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.phone?.message}</span>
+                  </label>
 
-              <label className="col-span-1 block">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
-                  Email <span className="text-[#75c9ea]">*</span>
-                </span>
-                <input
-                  {...register('email', {
-                    required: 'Обязательное поле',
-                    pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, message: 'Некорректный email' },
-                  })}
-                  type="email"
-                  autoComplete="email"
-                  placeholder="example@company.ru"
-                  className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
-                    errors.email
-                      ? 'border-red-500'
-                      : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
-                  }`}
-                />
-                <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.email?.message}</span>
-              </label>
+                  <label className="col-span-1 block">
+                    <span className="mb-1 block text-[12px] font-normal leading-[125%] md:text-[12px] lg:text-[14px] lg:leading-[20px]">
+                      Компания <span className="text-[#75c9ea]">*</span>
+                    </span>
+                    <input
+                      {...register('company', {
+                        required: 'Обязательное поле',
+                        minLength: { value: 2, message: 'Минимум 2 символа' },
+                        pattern: { value: /^[^<>{}\\]+$/, message: 'Недопустимые символы' },
+                      })}
+                      type="text"
+                      autoComplete="organization"
+                      placeholder="Название компании"
+                      className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${errors.company
+                        ? 'border-red-500'
+                        : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
+                        }`}
+                    />
+                    <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.company?.message}</span>
+                  </label>
 
-              <label className="col-span-1 block">
-                <span className="mb-1 block text-[14px] font-normal leading-[125%]">
-                  Ваши вопросы к обсуждению
-                </span>
-                <textarea
-                  {...register('discussionQuestions', {
-                    validate: (value) => !value || !/<[^>]+>/.test(value) || 'Недопустимые символы',
-                  })}
-                  autoComplete="off"
-                  placeholder="Какие темы вам особенно интересны?"
-                  rows={4}
-                  className={`block h-[110px] w-full resize-none rounded-[8px] border bg-[#000c1480] p-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${
-                    errors.discussionQuestions
-                      ? 'border-red-500'
-                      : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
-                  }`}
-                />
-                <span className="mt-1 block min-h-4 text-xs text-red-400">
-                  {errors.discussionQuestions?.message}
-                </span>
-              </label>
-              </div>
+                  <label className="col-span-1 block">
+                    <span className="mb-1 block text-[12px] font-normal leading-[125%] md:text-[12px] lg:text-[14px] lg:leading-[20px]">
+                      Должность <span className="text-[#75c9ea]">*</span>
+                    </span>
+                    <input
+                      {...register('position', {
+                        required: 'Обязательное поле',
+                        minLength: { value: 2, message: 'Минимум 2 символа' },
+                        pattern: { value: /^[a-zA-Zа-яёА-ЯЁ0-9\s\-.,]+$/, message: 'Только буквы и цифры' },
+                      })}
+                      type="text"
+                      autoComplete="organization-title"
+                      placeholder="Руководитель отдела..."
+                      className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${errors.position
+                        ? 'border-red-500'
+                        : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
+                        }`}
+                    />
+                    <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.position?.message}</span>
+                  </label>
 
-              <p className="mb-6 mt-2 text-[18px] font-normal leading-[156%] text-white">
-              Выбрано{' '}
-              <span className="text-[18px] leading-[156%] text-[#75c9ea]">
-                {selectedCount}
-              </span>{' '}
-              лекций
-              </p>
+                  <label className="col-span-1 block">
+                    <span className="mb-1 block text-[12px] font-normal leading-[125%] md:text-[12px] lg:text-[14px] lg:leading-[20px]">
+                      Email <span className="text-[#75c9ea]">*</span>
+                    </span>
+                    <input
+                      {...register('email', {
+                        required: 'Обязательное поле',
+                        pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, message: 'Некорректный email' },
+                      })}
+                      type="email"
+                      autoComplete="email"
+                      placeholder="example@company.ru"
+                      className={`h-[34px] w-full rounded-[8px] border bg-[#000c1480] px-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${errors.email
+                        ? 'border-red-500'
+                        : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
+                        }`}
+                    />
+                    <span className="mt-1 block min-h-4 text-xs text-red-400">{errors.email?.message}</span>
+                  </label>
 
-              <div className="mt-3">
-              <button
-                type="submit"
-                disabled={isSubmittingMock}
-                className="btn-ghost inline-flex h-[42px] w-full cursor-pointer items-center justify-center rounded-lg px-6 text-[16px] font-normal leading-[150%] text-white transition-opacity duration-200 hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isSubmittingMock ? 'Отправка...' : 'Зарегистрироваться'}
-              </button>
-              <p className="mt-3 text-center text-[10px] font-normal leading-[125%] text-[#ffffff4d] md:text-sm md:leading-[143%]">
-                Нажимая кнопку, вы соглашаетесь с{' '}
-                <a
-                  href="https://tl.protei.ru/privacy-policy"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline transition-colors hover:text-white"
-                >
-                  политикой обработки персональных данных
-                </a>
-                .
-              </p>
-              </div>
-            </form>
+                  <label className="col-span-1 block">
+                    <span className="mb-1 block text-[12px] font-normal leading-[125%] md:text-[12px] lg:text-[14px] lg:leading-[20px]">
+                      Ваши вопросы к обсуждению
+                    </span>
+                    <textarea
+                      {...register('discussionQuestions', {
+                        validate: (value) => !value || !/<[^>]+>/.test(value) || 'Недопустимые символы',
+                      })}
+                      autoComplete="off"
+                      placeholder="Какие темы вам особенно интересны?"
+                      rows={4}
+                      className={`block h-[110px] w-full resize-none rounded-[8px] border bg-[#000c1480] p-2 text-[12px] font-normal leading-[143%] text-[#d4e0f580] outline-none transition-colors placeholder:text-[#ffffff4d] ${errors.discussionQuestions
+                        ? 'border-red-500'
+                        : 'border-transparent hover:border-[#75c9ea] focus:border-[#75c9ea]'
+                        }`}
+                    />
+                    <span className="mt-1 block min-h-4 text-xs text-red-400">
+                      {errors.discussionQuestions?.message}
+                    </span>
+                  </label>
+                </div>
+
+                <p className="body-m mb-6 mt-2 text-white">
+                  Выбрано{' '}
+                  <span className="text-[#75c9ea]">{selectedCount}</span>{' '}
+                  лекций
+                </p>
+
+                <div className="mt-3">
+                  <button
+                    type="submit"
+                    disabled={isSubmittingMock}
+                    className="btn-ghost inline-flex h-[42px] w-full cursor-pointer items-center justify-center rounded-lg px-6 text-[16px] font-normal leading-[150%] text-white transition-opacity duration-200 hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isSubmittingMock ? 'Отправка...' : 'Зарегистрироваться'}
+                  </button>
+                  <p className="caption mt-3 text-center text-[#ffffff4d]">
+                    Нажимая кнопку, вы соглашаетесь с{' '}
+                    <a
+                      href="https://tl.protei.ru/privacy-policy"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline transition-colors hover:text-white"
+                    >
+                      политикой обработки персональных данных
+                    </a>
+                    .
+                  </p>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </section>
 
+
+      {/* Модальные окна без изменений */}
       {modalType && (
         <div
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
@@ -467,9 +470,8 @@ function App() {
           >
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/20">
               <svg
-                className={`h-6 w-6 ${
-                  modalType === 'success' ? 'text-emerald-400' : 'text-red-400'
-                }`}
+                className={`h-6 w-6 ${modalType === 'success' ? 'text-emerald-400' : 'text-red-400'
+                  }`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -487,9 +489,8 @@ function App() {
               </svg>
             </div>
             <h3
-              className={`mb-2 text-xl font-bold ${
-                modalType === 'success' ? 'text-emerald-400' : 'text-red-400'
-              }`}
+              className={`mb-2 text-xl font-bold ${modalType === 'success' ? 'text-emerald-400' : 'text-red-400'
+                }`}
             >
               {modalType === 'success'
                 ? 'Заявка отправлена!'

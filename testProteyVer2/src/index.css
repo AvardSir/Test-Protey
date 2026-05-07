@@ -54,3 +54,96 @@ body {
     box-shadow: 0 0 16px #72c7fc80;
   }
 }
+
+
+@layer base {
+  /* H1 */
+  h1 {
+    @apply text-[32px] leading-tight font-semibold;
+  }
+  @screen md {
+    h1 {
+      @apply text-[44px];
+    }
+  }
+  @screen lg {
+    h1 {
+      @apply text-[56px] leading-[64px];
+    }
+  }
+
+  /* H2 */
+  h2 {
+    @apply text-[24px] leading-tight font-semibold;
+  }
+  @screen md {
+    h2 {
+      @apply text-[32px];
+    }
+  }
+  @screen lg {
+    h2 {
+      @apply text-[40px] leading-[48px];
+    }
+  }
+
+  /* H3 */
+  h3 {
+    @apply text-[18px] leading-tight font-semibold;
+  }
+  @screen md {
+    h3 {
+      @apply text-[20px];
+    }
+  }
+  @screen lg {
+    h3 {
+      @apply text-[24px] leading-[32px];
+    }
+  }
+
+  /* Body L */
+  .body-l {
+    @apply text-[14px] leading-[143%];
+  }
+  @screen md {
+    .body-l {
+      @apply text-[16px];
+    }
+  }
+  @screen lg {
+    .body-l {
+      @apply text-[18px] leading-[28px];
+    }
+  }
+
+  /* Body M */
+  .body-m {
+    @apply text-[16px] leading-[150%];
+  }
+  @screen md {
+    .body-m {
+      @apply text-[18px] leading-[28px];
+    }
+  }
+  @screen lg {
+    .body-m {
+      @apply text-[18px] leading-[28px];
+    }
+  }
+
+  /* Caption */
+  .caption {
+    @apply text-[10px] leading-[125%];
+  }
+  @screen md {
+    .caption {
+      @apply text-[12px];
+    }
+  }
+  @screen lg {
+    .caption {
+      @apply text-[14px] leading-[20px];
+    }
+  }
+}
