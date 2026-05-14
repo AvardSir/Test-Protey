@@ -40,9 +40,9 @@
 - ✅ **Сохранение выбранных лекций** при повторном открытии (при необходимости можно добавить localStorage)
 
 ---
-
 ## Структура ключевых компонентов
 
+```text
 testProteyVer2/
 ├── public/
 │   ├── favicon.svg
@@ -68,6 +68,7 @@ testProteyVer2/
 ├── tailwind.config.js
 ├── tsconfig.json
 └── README.md
+```
 
 ## Локальный запуск
 
@@ -76,9 +77,16 @@ git clone https://github.com/AvardSir/Test-Protey
 cd testProteyVer2
 npm install
 npm run dev
-Проект будет доступен по адресу http://localhost:5173
+```
 
-Сборка для продакшена:
+Проект будет доступен по адресу:
 
-bash
+```text
+http://localhost:5173
+```
+
+## Сборка для продакшена
+
+```bash
 npm run build
+```
