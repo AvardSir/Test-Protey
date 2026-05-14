@@ -98,7 +98,7 @@ function normalizePhone(value: string): string {
   const p3 = d.slice(6, 8)
   const p4 = d.slice(8, 10)
 
-  let result = '+7 (987) 654-32-10'
+  let result = '+7'
   if (p1) result += ` (${p1}`
   if (p1.length === 3) result += ')'
   if (p2) result += ` ${p2}`
@@ -122,7 +122,7 @@ function App() {
   } = useForm<FormValues>({
     defaultValues: {
       fullName: '',
-      phone: '+7 (987) 654-32-10',
+      phone: '',
       company: '',
       position: '',
       email: '',
