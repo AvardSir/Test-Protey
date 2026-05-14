@@ -98,7 +98,7 @@ function normalizePhone(value: string): string {
   const p3 = d.slice(6, 8)
   const p4 = d.slice(8, 10)
 
-  let result = '+7'
+  let result = '+7 (987) 654-32-10'
   if (p1) result += ` (${p1}`
   if (p1.length === 3) result += ')'
   if (p2) result += ` ${p2}`
@@ -122,7 +122,7 @@ function App() {
   } = useForm<FormValues>({
     defaultValues: {
       fullName: '',
-      phone: '+7',
+      phone: '+7 (987) 654-32-10',
       company: '',
       position: '',
       email: '',
@@ -234,7 +234,7 @@ function App() {
                     <button type="button" className="flex items-center gap-3 text-left" onClick={() => toggleDay(day)}>
                       <h3>{day}</h3>
                       <svg
-                        className={`h-3 w-3 shrink-0 text-white transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                        className={`h-6 w-6 shrink-0 text-white transition-transform ${isOpen ? 'rotate-180' : ''}`}
                         viewBox="0 0 12 12"
                         fill="none"
                         aria-hidden="true"
@@ -253,12 +253,18 @@ function App() {
                             className={`lecture-card flex w-full cursor-pointer gap-3 rounded-[3px] border p-2.5 text-left transition-colors hover:border-[#75c9ea] ${selectedLectures.includes(lecture.id) ? 'border-[#75c9ea]' : 'border-transparent'
                               }`}
                           >
-                            <img src={lecture.image} alt="" aria-hidden="true" className="h-[80px] w-[80px] shrink-0 rounded-[2px] object-cover" />
+                            <img
+                              src={lecture.image}
+                              alt=""
+                              aria-hidden="true"
+                              className="w-[120px] h-auto shrink-0 rounded-xl object-contain"
+
+                            />
                             <div className="min-w-0">
                               <div className="mb-1 inline-flex rounded-[8px] border border-[#75c9ea] bg-transparent px-2 py-[1px] text-[10px] leading-[125%] text-white">
-                                {lecture.time}
+                                {lecture.time}t
                               </div>
-                              <p className="text-[14px] font-semibold leading-[120%] text-white md:text-[16px]">
+                              <p className="text-[14px] font-normal leading-[120%] text-white md:text-[16px]">
                                 {lecture.title}
                               </p>
                               <p className="mt-1 text-[11px] leading-[125%] text-white">
@@ -288,10 +294,6 @@ function App() {
                 </h2>
               </div>
             </div>
-
-            <h2>
-              Регистрация <br /> на лекторий
-            </h2>
 
             <div className="rounded-[8px] bg-blue-gradient p-4 md:p-5 lg:p-5">
               <form className="mt-2" onSubmit={handleSubmit(onSubmit)} noValidate>
