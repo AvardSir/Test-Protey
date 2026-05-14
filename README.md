@@ -2,8 +2,7 @@
 
 Интерактивная форма регистрации на трёхдневный лекторий с выбором лекций по дням. Проект разработан для **НТЦ ПРОТЕЙ** — компании-разработчика телекоммуникационных решений и систем безопасности для критической информационной инфраструктуры (КИИ).
 
-🔗 **Демо:** [ссылка на сайт](https://название-проекта.vercel.app)
-
+🔗 **Демо:** [ссылка на сайт](https://test-protey.vercel.app/)
 ---
 
 ## О проекте
@@ -73,7 +72,7 @@ testProteyVer2/
 ## Локальный запуск
 
 ```bash
-git clone [https://github.com/ваш-аккаунт/название-репозитория.git](https://github.com/AvardSir/Test-Protey.git)
+git clone https://github.com/AvardSir/Test-Protey
 cd testProteyVer2
 npm install
 npm run dev
